@@ -43,7 +43,6 @@ list.centerX()
 toBottom = (itemAtPos, items) ->
 	moving = items.filter (item) ->
 		item.pos is itemAtPos
-	console.log(itemAtPos)
 	moving = moving[0]
 	
 	toShift = items.filter (item) ->
@@ -58,6 +57,24 @@ toBottom = (itemAtPos, items) ->
 	moving.pos = ITEMS.length - 1
 	moving.item.updatePos(moving.pos)
 	moving.item.move()
+	
+toTop = (itemAtPos, items) ->
+	moving = items.filter (item) ->
+		item.pos is itemAtPos
+	moving = moving[0]
+	
+	toShift = items.filter (item) ->
+		item.pos < itemAtPos
+	
+	toShift.forEach (item) ->
+		item.pos++
+		item.item.updatePos(item.pos)
+		item.item.move()
+	
+	moving.pos = 0
+	moving.item.updatePos(moving.pos)
+	moving.item.move()
+	
 	
 
 listItem = (text, index) ->
@@ -111,7 +128,7 @@ listItem = (text, index) ->
 		if item.y > item.previousY
 			toBottom(item.index, items)
 		else
-			item.move()
+			toTop(item.index, items)
 		item.states.switch("default")
 	
 	item
